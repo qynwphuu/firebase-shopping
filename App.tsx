@@ -32,6 +32,11 @@ export default function App() {
     } else {
       Alert.alert("Error", "Type product and amount first");
     }
+
+    setProduct({
+      title: "",
+      amount: "",
+    });
   };
 
   const handleDelete = (item: Product) => {
