@@ -1,8 +1,16 @@
-import { StyleSheet, Text, View, TextInput, Button, Alert, FlatList } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  Alert,
+  FlatList,
+} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
 import { app } from "./firebaseConfig";
-import { getDatabase, push, ref, onValue } from "firebase/database";
+import { getDatabase, push, ref, onValue, remove } from "firebase/database";
 
 export default function App() {
   const database = getDatabase(app);
@@ -26,6 +34,11 @@ export default function App() {
     }
   };
 
+  const handleDelete = (item: Product) => {
+    const itemRef = ref(database, `items/${item.title}`);
+    remove(itemRef);
+  };
+
   useEffect(() => {
     return onValue(ref(database, "items/"), (snapshot) => {
       const data = snapshot.val();
@@ -42,7 +55,7 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
           <TextInput
-          style={styles.input}
+            style={styles.input}
             placeholder="Product"
             onChangeText={(text) => setProduct({ ...product, title: text })}
             value={product.title}
@@ -60,16 +73,20 @@ export default function App() {
 
           <FlatList
             renderItem={({ item }) => (
-              <View>
+              <View style={styles.row}>
                 <Text style={styles.text}>
                   {item.title}, {item.amount}
+                </Text>
+                <Text
+                  style={{ color: "#0d00ff", marginLeft: 15, fontSize: 16 }}
+                  onPress={() => handleDelete(item)}
+                >
+                  Delete
                 </Text>
               </View>
             )}
             data={items}
           />
-
-          
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
