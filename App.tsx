@@ -1,8 +1,20 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
 
 export default function App() {
+  type Product = {
+    title: string;
+    amount: string;
+  };
+
+  const [product, setProduct] = useState<Product>({
+    title: "",
+    amount: "",
+  });
+  const [items, setItems] = useState<Product[]>([]);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
