@@ -16,11 +16,13 @@ export default function App() {
   const database = getDatabase(app);
 
   type Product = {
+    id: string;
     title: string;
     amount: string;
   };
 
   const [product, setProduct] = useState<Product>({
+    id: "",
     title: "",
     amount: "",
   });
@@ -34,21 +36,25 @@ export default function App() {
     }
 
     setProduct({
+      id: "",
       title: "",
       amount: "",
     });
   };
 
-  const handleDelete = (item: Product) => {
-    const itemRef = ref(database, `items/${item.title}`);
-    remove(itemRef);
+  const handleDelete = (id: string) => {
+    remove(ref(database, "items/" + id));
   };
 
   useEffect(() => {
     return onValue(ref(database, "items/"), (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        setItems(Object.values(data) as Product[]);
+        const parsedItems = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setItems(parsedItems);
       } else {
         setItems([]);
       }
@@ -84,7 +90,7 @@ export default function App() {
                 </Text>
                 <Text
                   style={{ color: "#0d00ff", marginLeft: 15, fontSize: 16 }}
-                  onPress={() => handleDelete(item)}
+                  onPress={() => handleDelete(item.id)}
                 >
                   Delete
                 </Text>
