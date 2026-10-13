@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TextInput, Button, Alert, FlatList } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
@@ -43,11 +42,13 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <View style={styles.container}>
           <TextInput
-            placeholder="Product title"
+          style={styles.input}
+            placeholder="Product"
             onChangeText={(text) => setProduct({ ...product, title: text })}
             value={product.title}
           />
           <TextInput
+            style={styles.input}
             placeholder="Amount"
             onChangeText={(text) => setProduct({ ...product, amount: text })}
             value={product.amount}
@@ -55,16 +56,20 @@ export default function App() {
 
           <Button onPress={handleSave} title="SAVE" />
 
+          <Text style={styles.header}>Shopping List</Text>
+
           <FlatList
             renderItem={({ item }) => (
               <View>
-                <Text style={{ fontSize: 18 }}>
+                <Text style={styles.text}>
                   {item.title}, {item.amount}
                 </Text>
               </View>
             )}
             data={items}
           />
+
+          
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
@@ -77,5 +82,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: 50,
+  },
+  input: {
+    width: 200,
+    borderColor: "gray",
+    borderWidth: 1,
+    margin: 5,
+    padding: 5,
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 5,
+  },
+  text: {
+    fontSize: 16,
+  },
+  header: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
   },
 });
